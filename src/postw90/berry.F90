@@ -3571,16 +3571,11 @@ contains
       ! this term only contributes in metals with finite temperature
       if (pw90_berry%temperature .le. 1.0e-7_dp) cycle
 
-      ! derivative of the occupations w.r.t. energy: docc_fac=-delta(eig(n)-eF)
-      ! with delta(eig(n)-eF) approximated to a gaussian with temperature smearing
-      docc_fac = 0.d0
-      ddocc_fac = 0.d0
-      if (abs(eig(n) - fermi_energy) .le. 5.d0*kt) then
-        docc_fac = -exp(-0.5d0*((eig(n) - fermi_energy)/kt)**2)/(kt*sqrt(2.d0*pi))
-        ddocc_fac = -(eig(n) - fermi_energy)/(kt**2)*docc_fac
-      else
-        cycle
-      endif
+      ! use energy derivatives of the same Fermi-Dirac occupations as the 2- and 3-band terms:
+      ! docc_fac = df/dE, ddocc_fac = d2f/dE2
+      if (occ(n)*(1.d0 - occ(n)) < 1.0e-10_dp) cycle
+      docc_fac = -occ(n)*(1.d0 - occ(n))/kt
+      ddocc_fac = -(1.d0 - 2.d0*occ(n))*docc_fac/kt
 
       ! construct the semiclassical 1-band intraband transition matrix elements
       ! (see Eq. (22.b) of GGKIA23)

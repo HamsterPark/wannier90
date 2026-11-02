@@ -8,6 +8,10 @@
 
 - Fix the Berry-curvature tensor used in the metallic SHG Berry-curvature-dipole term.
 
+### Changes
+
+- The one-band (Fermi-surface) SHG terms at T > 0 use the analytic energy derivatives of the Fermi-Dirac occupations of the two- and three-band terms instead of a Gaussian of width kT.
+
 ## v3.1.0 (5th March 2020)
 
 ### New features
